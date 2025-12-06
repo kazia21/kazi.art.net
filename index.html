@@ -6,12 +6,11 @@
   <title>My Net Art</title>
   <style>
     @font-face {
-      font-family: 'PixelWarden';
-      src: url('PixelWarden.ttf') format('truetype');
+      font-family: 'CustomFont';
+      src: url('Banxors.otf') format('opentype');
       font-weight: normal;
       font-style: normal;
     }
-
 
 
     body {
@@ -46,13 +45,20 @@
       border: none;
       cursor: pointer;
       transition: 0.3s ease;
-      font-family: 'PixelWarden', sans-serif;
-      border-radius: 20px;
     }
 
     .start-button:hover {
       background: white;
       color: black;
+
+    <style> 
+      @font-face {
+        font-family: 'CustomFont';
+        src: url('PixelWarden.ttf') formar('opentype');
+        font-weight: normal;
+        font-size: normal;
+      }
+      
     }
   </style>
 </head>
@@ -60,7 +66,7 @@
   <h1>My Net Art</h1>
 
   <div class="image-container">
-    <img src="your-image.png" alt="Main Art" style="max-width: 45vw; height: auto;" />
+    <img src="your-image.png" alt="Main Art" style="max-width: 90vw; height: auto;" />
     <button class="start-button">START</button>
   </div>
 </body>
