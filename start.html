@@ -30,7 +30,50 @@
       margin: 0;
       padding: 700px 50px 50px 945px;
     }
-  
+
+  <!-- Video element (place inside <body>) -->
+<div id="videoWrap" style="width:300px; height:auto; margin:0 auto; overflow:hidden;">
+  <video id="hoverVideo" controls preload="none" style="width:300px; height:auto; opacity:0; transition:opacity .4s ease; display:block;">
+    <!-- Primary .mov source -->
+    <source src="Fenyvidi1.mov" type="video/quicktime">
+    <!-- Fallback to MP4 for better browser support (optional but recommended) -->
+    <source src="Fenyvidi1.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const vid = document.getElementById('hoverVideo');
+  const wrap = document.getElementById('videoWrap');
+  let appeared = false;
+
+  function revealOnce() {
+    if (appeared) return;
+    // Set preload so the browser begins loading when user first interacts
+    vid.preload = 'auto';
+    // Reveal visually
+    vid.style.opacity = '1';
+    // Optionally start playing on reveal (uncomment if desired):
+    // vid.play().catch(()=>{/* autoplay might be blocked if not muted */});
+    appeared = true;
+    // Remove listeners so this runs only once
+    wrap.removeEventListener('pointerenter', onPointerEnter);
+    wrap.removeEventListener('touchstart', onTouchStart);
+  }
+
+  function onPointerEnter(e) {
+    revealOnce();
+  }
+  function onTouchStart(e) {
+    revealOnce();
+  }
+
+  // Attach listeners to the wrapper so the hover area is predictable
+  wrap.addEventListener('pointerenter', onPointerEnter, {passive:true});
+  wrap.addEventListener('touchstart', onTouchStart, {passive:true});
+});
+</script>
   </style>
 </video>
 </body>
