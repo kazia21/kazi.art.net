@@ -17,13 +17,18 @@
       padding: 700px 50px 50px 945px;
     }
 
-   .video {
+<label>
+  <input type="checkbox" id="show" hidden>
+  <video width="200" height="150" autoplay muted loop></video>
+</label>
+	  
+   video {
     opacity: 0;
     transition: opacity 0.3s;
   }
 
-  .video:hover {
-    opacity: 1;
+  #show: checked + video {
+	  opacity: 1;
   }
 	  
 #kep {
