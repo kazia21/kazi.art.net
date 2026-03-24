@@ -1,0 +1,151 @@
+import { useState } from 'react';
+import backgroundImage from 'figma:asset/5b7ce046f33f06b5da0a405d0bb94fce048c71d3.png';
+
+/**
+ * Text phase interface for the opening sequence
+ */
+interface TextPhase {
+  text: string;
+  italic: boolean;
+  glow?: boolean;
+}
+
+/**
+ * Main App Component - RPG Text Adventure Game
+ * 
+ * Features:
+ * - Multi-phase opening sequence with snowy forest background
+ * - Click-to-advance text progression
+ * - Interactive glowing text button to start the game
+ * - Retro videogame aesthetic with pixel font
+ */
+export default function App() {
+  // State management
+  const [textIndex, setTextIndex] = useState(0);
+  const [showTextBox, setShowTextBox] = useState(true);
+  const [isHovering, setIsHovering] = useState(false);
+
+  // Opening sequence text phases
+  const texts: TextPhase[] = [
+    { text: '"Where am I?"', italic: true },
+    { text: '"..."', italic: true },
+    { text: '', italic: false }, // Empty screen phase
+    { 
+      text: "You wake up in the woods. You can't remember anything really, everything is so blury.", 
+      italic: false 
+    },
+    { 
+      text: "You can't recognize the woods but this familiar feeling is haunting you. Maybe you're just having a bad dream again... ", 
+      italic: false 
+    },
+    { 
+      text: "Start searching images on the screen with your cursor to start to remember!", 
+      italic: false, 
+      glow: true 
+    }
+  ];
+
+  // Style constants
+  const FONT_FAMILY = "'Anonymous Pro', monospace";
+  const NORMAL_FONT_SIZE = '12px';
+  const GLOW_FONT_SIZE = '16px';
+  const LINE_HEIGHT = '1.5rem';
+  const LETTER_SPACING = '0.05em';
+  
+  // Glow effect styles
+  const NORMAL_GLOW = '0 0 10px rgba(200, 200, 200, 0.9), 0 0 20px rgba(180, 180, 180, 0.7), 0 0 30px rgba(160, 160, 160, 0.5)';
+  const HOVER_GLOW = '0 0 20px rgba(255, 255, 255, 1), 0 0 40px rgba(240, 240, 240, 1), 0 0 60px rgba(220, 220, 220, 0.9), 0 0 80px rgba(200, 200, 200, 0.8), 0 0 100px rgba(180, 180, 180, 0.6)';
+
+  /**
+   * Advances to the next text phase
+   */
+  const handleClick = () => {
+    if (textIndex < texts.length - 1) {
+      setTextIndex(textIndex + 1);
+    }
+  };
+
+  /**
+   * Handles clicking the glowing text button to start the game
+   */
+  const handleGlowTextClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowTextBox(false);
+  };
+
+  /**
+   * Determines text box positioning based on current phase
+   */
+  const getTextBoxPosition = () => {
+    // First two phases: bottom of screen
+    // Remaining phases: center of screen
+    return textIndex < 2 
+      ? 'bottom-8' 
+      : 'top-[55%] -translate-y-1/2';
+  };
+
+  /**
+   * Gets dynamic text styles based on current phase
+   */
+  const getTextStyle = () => {
+    const currentText = texts[textIndex];
+    
+    return {
+      fontFamily: FONT_FAMILY,
+      fontSize: currentText.glow ? GLOW_FONT_SIZE : NORMAL_FONT_SIZE,
+      lineHeight: LINE_HEIGHT,
+      letterSpacing: LETTER_SPACING,
+      transition: 'text-shadow 0.3s ease',
+      ...(currentText.glow && {
+        textShadow: isHovering ? HOVER_GLOW : NORMAL_GLOW
+      })
+    };
+  };
+
+  const currentText = texts[textIndex];
+
+  return (
+    <div 
+      className="size-full relative overflow-hidden cursor-pointer"
+      onClick={handleClick}
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Text Box Container */}
+      {showTextBox && currentText.text && (
+        <div 
+          className={`absolute left-1/2 -translate-x-1/2 w-[90%] max-w-xl ${getTextBoxPosition()}`}
+        >
+          {/* Black text box without border */}
+          <div className="bg-black p-6 shadow-2xl">
+            <p 
+              className={`text-white text-center ${currentText.italic ? 'italic' : ''} ${currentText.glow ? 'cursor-pointer' : ''}`}
+              style={getTextStyle()}
+              onClick={currentText.glow ? handleGlowTextClick : undefined}
+              onMouseEnter={currentText.glow ? () => setIsHovering(true) : undefined}
+              onMouseLeave={currentText.glow ? () => setIsHovering(false) : undefined}
+            >
+              {currentText.text}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Click indicator - shows when there are more text phases */}
+      {textIndex < texts.length - 1 && (
+        <div 
+          className="absolute bottom-8 right-8 text-white animate-pulse" 
+          style={{ 
+            fontFamily: FONT_FAMILY, 
+            fontSize: '0.875rem' 
+          }}
+        >
+          ▼
+        </div>
+      )}
+    </div>
+  );
+}
