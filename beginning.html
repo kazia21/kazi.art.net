@@ -12,134 +12,105 @@
       background-size: cover;
     }
 
+</style>
 
-export default function App() {
-  // State management
-  const [textIndex, setTextIndex] = useState(0);
-  const [showTextBox, setShowTextBox] = useState(true);
-  const [isHovering, setIsHovering] = useState(false);
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  // Opening sequence text phases
-  const texts: TextPhase[] = [
-    { text: '"Where am I?"', italic: true },
-    { text: '"..."', italic: true },
-    { text: '', italic: false }, // Empty screen phase
-    { 
-      text: "You wake up in the woods. You can't remember anything really, everything is so blury.", 
-      italic: false 
-    },
-    { 
-      text: "You can't recognize the woods but this familiar feeling is haunting you. Maybe you're just having a bad dream again... ", 
-      italic: false 
-    },
-    { 
-      text: "Start searching images on the screen with your cursor to start to remember!", 
-      italic: false, 
-      glow: true 
+  <style>
+    @font-face {
+      font-family: 'Anonymous Pro';
+      src: url('AnonymusPro-Regular.ttf') format('truetype');
     }
-  ];
 
-  // Style constants
-  const FONT_FAMILY = "'Anonymous Pro', monospace";
-  const NORMAL_FONT_SIZE = '12px';
-  const GLOW_FONT_SIZE = '16px';
-  const LINE_HEIGHT = '1.5rem';
-  const LETTER_SPACING = '0.05em';
-  
-  // Glow effect styles
-  const NORMAL_GLOW = '0 0 10px rgba(200, 200, 200, 0.9), 0 0 20px rgba(180, 180, 180, 0.7), 0 0 30px rgba(160, 160, 160, 0.5)';
-  const HOVER_GLOW = '0 0 20px rgba(255, 255, 255, 1), 0 0 40px rgba(240, 240, 240, 1), 0 0 60px rgba(220, 220, 220, 0.9), 0 0 80px rgba(200, 200, 200, 0.8), 0 0 100px rgba(180, 180, 180, 0.6)';
-
-  /**
-   * Advances to the next text phase
-   */
-  const handleClick = () => {
-    if (textIndex < texts.length - 1) {
-      setTextIndex(textIndex + 1);
+    body {
+      margin: 0;
     }
-  };
+  </style>
+</head>
 
-  /**
-   * Handles clicking the glowing text button to start the game
-   */
-  const handleGlowTextClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowTextBox(false);
-  };
+<body>
+  <div id="root"></div>
 
-  /**
-   * Determines text box positioning based on current phase
-   */
-  const getTextBoxPosition = () => {
-    // First two phases: bottom of screen
-    // Remaining phases: center of screen
-    return textIndex < 2 
-      ? 'bottom-8' 
-      : 'top-[55%] -translate-y-1/2';
-  };
+  <script type="text/babel">
+    const { useState } = React;
 
-  /**
-   * Gets dynamic text styles based on current phase
-   */
-  const getTextStyle = () => {
-    const currentText = texts[textIndex];
-    
-    return {
-      fontFamily: FONT_FAMILY,
-      fontSize: currentText.glow ? GLOW_FONT_SIZE : NORMAL_FONT_SIZE,
-      lineHeight: LINE_HEIGHT,
-      letterSpacing: LETTER_SPACING,
-      transition: 'text-shadow 0.3s ease',
-      ...(currentText.glow && {
-        textShadow: isHovering ? HOVER_GLOW : NORMAL_GLOW
-      })
-    };
-  };
+    function App() {
+      const [textIndex, setTextIndex] = useState(0);
+      const [showTextBox, setShowTextBox] = useState(true);
+      const [isHovering, setIsHovering] = useState(false);
 
-  const currentText = texts[textIndex];
+      const texts = [
+        { text: '"Where am I?"', italic: true },
+        { text: '"..."', italic: true },
+        { text: '', italic: false },
+        { text: "You wake up in the woods. You can't remember anything really, everything is so blury.", italic: false },
+        { text: "You can't recognize the woods but this familiar feeling is haunting you. Maybe you're just having a bad dream again...", italic: false },
+        { text: "Start searching images on the screen with your cursor to start to remember!", italic: false, glow: true }
+      ];
 
-  return (
-    <div 
-      className="size-full relative overflow-hidden cursor-pointer"
-      onClick={handleClick}
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      {/* Text Box Container */}
-      {showTextBox && currentText.text && (
-        <div 
-          className={`absolute left-1/2 -translate-x-1/2 w-[90%] max-w-xl ${getTextBoxPosition()}`}
+      const FONT_FAMILY = "'Anonymous Pro', monospace";
+
+      const handleClick = () => {
+        if (textIndex < texts.length - 1) {
+          setTextIndex(textIndex + 1);
+        }
+      };
+
+      const handleGlowTextClick = (e) => {
+        e.stopPropagation();
+        setShowTextBox(false);
+      };
+
+      const getTextBoxPosition = () => {
+        return textIndex < 2 ? 'bottom-8' : 'top-[55%] -translate-y-1/2';
+      };
+
+      const getTextStyle = () => {
+        const currentText = texts[textIndex];
+        return {
+          fontFamily: FONT_FAMILY,
+          fontSize: currentText.glow ? '16px' : '12px',
+          letterSpacing: '0.05em'
+        };
+      };
+
+      const currentText = texts[textIndex];
+
+      return (
+        <div
+          className="w-screen h-screen relative overflow-hidden cursor-pointer"
+          onClick={handleClick}
+          style={{ backgroundColor: 'black' }}
         >
-          {/* Black text box without border */}
-          <div className="bg-black p-6 shadow-2xl">
-            <p 
-              className={`text-white text-center ${currentText.italic ? 'italic' : ''} ${currentText.glow ? 'cursor-pointer' : ''}`}
-              style={getTextStyle()}
-              onClick={currentText.glow ? handleGlowTextClick : undefined}
-              onMouseEnter={currentText.glow ? () => setIsHovering(true) : undefined}
-              onMouseLeave={currentText.glow ? () => setIsHovering(false) : undefined}
-            >
-              {currentText.text}
-            </p>
-          </div>
-        </div>
-      )}
+          {showTextBox && currentText.text && (
+            <div className={`absolute left-1/2 -translate-x-1/2 w-[90%] max-w-xl ${getTextBoxPosition()}`}>
+              <div className="bg-black p-6">
+                <p
+                  className={`text-white text-center ${currentText.italic ? 'italic' : ''}`}
+                  style={getTextStyle()}
+                  onClick={currentText.glow ? handleGlowTextClick : undefined}
+                  onMouseEnter={currentText.glow ? () => setIsHovering(true) : undefined}
+                  onMouseLeave={currentText.glow ? () => setIsHovering(false) : undefined}
+                >
+                  {currentText.text}
+                </p>
+              </div>
+            </div>
+          )}
 
-      {/* Click indicator - shows when there are more text phases */}
-      {textIndex < texts.length - 1 && (
-        <div 
-          className="absolute bottom-8 right-8 text-white animate-pulse" 
-          style={{ 
-            fontFamily: FONT_FAMILY, 
-            fontSize: '0.875rem' 
-          }}
-        >
-          ▼
+          {textIndex < texts.length - 1 && (
+            <div className="absolute bottom-8 right-8 text-white animate-pulse" style={{ fontFamily: FONT_FAMILY }}>
+              ▼
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  );
-}
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
