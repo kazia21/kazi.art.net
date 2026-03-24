@@ -20,12 +20,12 @@
 
     video {
       opacity: 0.3;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.4s ease;
       position: absolute;
     }
 
-    .discovered {
-      opacity: 1 !important;
+    video:hover {
+      opacity: 1;
     }
 
     #kep { top: 10%; left: 35%; }
@@ -54,7 +54,6 @@ function App() {
   const [textIndex, setTextIndex] = useState(0);
   const [showTextBox, setShowTextBox] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
-  const [foundVideos, setFoundVideos] = useState({});
 
   const texts = [
     { text: '"Where am I?"', italic: true },
@@ -75,10 +74,6 @@ function App() {
     e.stopPropagation();
     setShowTextBox(false);
     setGameStarted(true);
-  };
-
-  const discover = (id) => {
-    setFoundVideos(prev => ({ ...prev, [id]: true }));
   };
 
   const getTextBoxPosition = () => {
@@ -112,31 +107,41 @@ function App() {
 
       {gameStarted && (
         <>
-          {[
-            { id: 'kep1', src: 'Fenyvidi1.mp4', w:100,h:75 },
-            { id: 'kep', src: 'Vidi4Cicalampa.mp4', w:200,h:175 },
-            { id: 'kep2', src: 'Vidi2TV.mp4', w:150,h:125 },
-            { id: 'kep3', src: 'Fenyvidi5.mp4', w:150,h:125 },
-            { id: 'kep4', src: 'Vidi6Buszmeg.mp4', w:150,h:125 },
-            { id: 'kep5', src: 'Vidi3tabla.mp4', w:150,h:125 },
-            { id: 'kep6', src: 'Vidi7Egeszsegugy.mp4', w:150,h:125 },
-            { id: 'kep7', src: 'Vidi8Reklamtabla.mp4', w:150,h:125 },
-            { id: 'kep8', src: 'Vidi9Laptop.mp4', w:150,h:125 }
-          ].map(v => (
-            <video
-              key={v.id}
-              id={v.id}
-              width={v.w}
-              height={v.h}
-              autoPlay
-              muted
-              loop
-              className={foundVideos[v.id] ? 'discovered' : ''}
-              onMouseEnter={() => discover(v.id)}
-            >
-              <source src={v.src} type="video/mp4"/>
-            </video>
-          ))}
+          <video width="100" height="75" autoPlay muted loop>
+            <source src="Fenyvidi1.mp4" type="video/mp4"/>
+          </video>
+
+          <video id="kep" width="200" height="175" autoPlay muted loop>
+            <source src="Vidi4Cicalampa.mp4" type="video/mp4"/>
+          </video>
+
+          <video id="kep2" width="150" height="125" autoPlay muted loop>
+            <source src="Vidi2TV.mp4" type="video/mp4"/>
+          </video>
+
+          <video id="kep3" width="150" height="125" autoPlay muted loop>
+            <source src="Fenyvidi5.mp4" type="video/mp4"/>
+          </video>
+
+          <video id="kep4" width="150" height="125" autoPlay muted loop>
+            <source src="Vidi6Buszmeg.mp4" type="video/mp4"/>
+          </video>
+
+          <video id="kep5" width="150" height="125" autoPlay muted loop>
+            <source src="Vidi3tabla.mp4" type="video/mp4"/>
+          </video>
+
+          <video id="kep6" width="150" height="125" autoPlay muted loop>
+            <source src="Vidi7Egeszsegugy.mp4" type="video/mp4"/>
+          </video>
+
+          <video id="kep7" width="150" height="125" autoPlay muted loop>
+            <source src="Vidi8Reklamtabla.mp4" type="video/mp4"/>
+          </video>
+
+          <video id="kep8" width="150" height="125" autoPlay muted loop>
+            <source src="Vidi9Laptop.mp4" type="video/mp4"/>
+          </video>
         </>
       )}
     </div>
