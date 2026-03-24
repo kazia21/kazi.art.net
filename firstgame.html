@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Game</title>
 
   <style>
@@ -11,6 +11,7 @@
       padding: 0;
       background: url('Forest1.JPG') no-repeat center center fixed;
       background-size: cover;
+      font-family: 'Anonymous Pro', monospace;
     }
 
     @font-face {
@@ -18,10 +19,24 @@
       src: url('AnonymusPro-Regular.ttf') format('truetype');
     }
 
-    video {
-      opacity: 0.5;
-      transition: opacity 0.4s ease;
+    /* TEXT BOX */
+    #textbox {
       position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 40px;
+      background: black;
+      color: white;
+      padding: 10px 20px;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    /* VIDEOS */
+    video {
+      position: absolute;
+      opacity: 0.3;
+      transition: opacity 0.4s ease;
     }
 
     video:hover {
@@ -36,119 +51,87 @@
     #kep6 { top: 10%; left: 20%; }
     #kep7 { top: 33%; left: 72%; }
     #kep8 { top: 55%; left: 33%; }
-  </style>
 
-  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+    #game {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
-<div id="root"></div>
 
-<script type="text/babel">
-const { useState } = React;
+<div id="textbox">"Where am I?"</div>
 
-function App() {
-  const [textIndex, setTextIndex] = useState(0);
-  const [showTextBox, setShowTextBox] = useState(true);
-  const [gameStarted, setGameStarted] = useState(false);
+<div id="game">
+  <video width="100" height="75" autoplay muted loop>
+    <source src="Fenyvidi1.mp4" type="video/mp4">
+  </video>
 
+  <video id="kep" width="200" height="175" autoplay muted loop>
+    <source src="Vidi4Cicalampa.mp4" type="video/mp4">
+  </video>
+
+  <video id="kep2" width="150" height="125" autoplay muted loop>
+    <source src="Vidi2TV.mp4" type="video/mp4">
+  </video>
+
+  <video id="kep3" width="150" height="125" autoplay muted loop>
+    <source src="Fenyvidi5.mp4" type="video/mp4">
+  </video>
+
+  <video id="kep4" width="150" height="125" autoplay muted loop>
+    <source src="Vidi6Buszmeg.mp4" type="video/mp4">
+  </video>
+
+  <video id="kep5" width="150" height="125" autoplay muted loop>
+    <source src="Vidi3tabla.mp4" type="video/mp4">
+  </video>
+
+  <video id="kep6" width="150" height="125" autoplay muted loop>
+    <source src="Vidi7Egeszsegugy.mp4" type="video/mp4">
+  </video>
+
+  <video id="kep7" width="150" height="125" autoplay muted loop>
+    <source src="Vidi8Reklamtabla.mp4" type="video/mp4">
+  </video>
+
+  <video id="kep8" width="150" height="125" autoplay muted loop>
+    <source src="Vidi9Laptop.mp4" type="video/mp4">
+  </video>
+</div>
+
+<script>
   const texts = [
-    { text: '"Where am I?"', italic: true },
-    { text: '"..."', italic: true },
-    { text: '', italic: false },
-    { text: "You wake up in the woods. You can't remember anything really, everything is so blury.", italic: false },
-    { text: "You can't recognize the woods but this familiar feeling is haunting you. Maybe you're just having a bad dream again...", italic: false },
-    { text: "Start searching images on the screen with your cursor to start to remember!", italic: false, glow: true }
+    '"Where am I?"',
+    '"..."',
+    '',
+    "You wake up in the woods. You can't remember anything really, everything is so blury.",
+    "You can't recognize the woods but this familiar feeling is haunting you. Maybe you're just having a bad dream again...",
+    "Start searching images on the screen with your cursor to start to remember!"
   ];
 
-  const handleClick = () => {
-    if (!gameStarted && textIndex < texts.length - 1) {
-      setTextIndex(textIndex + 1);
+  let index = 0;
+  const textbox = document.getElementById('textbox');
+  const game = document.getElementById('game');
+
+  textbox.addEventListener('click', () => {
+    index++;
+
+    if (index < texts.length) {
+      textbox.textContent = texts[index];
+
+      if (index >= 2) {
+        textbox.style.top = '50%';
+        textbox.style.bottom = 'auto';
+        textbox.style.transform = 'translate(-50%, -50%)';
+      }
+
+    } else {
+      textbox.style.display = 'none';
+      game.style.display = 'block';
     }
-  };
-
-  const handleGlowTextClick = (e) => {
-    e.stopPropagation();
-    setShowTextBox(false);
-    setGameStarted(true);
-  };
-
-  const getTextBoxPosition = () => {
-    return textIndex < 2 ? 'bottom-8' : 'top-[55%] -translate-y-1/2';
-  };
-
-  const currentText = texts[textIndex];
-
-  return (
-    <div className="w-screen h-screen relative overflow-hidden cursor-pointer" onClick={handleClick}>
-      
-      {!gameStarted && showTextBox && currentText.text && (
-        <div className={`absolute left-1/2 -translate-x-1/2 ${getTextBoxPosition()}`}>
-          <div className="bg-black px-4 py-2 inline-block">
-            <p
-              className={`text-white text-center ${currentText.italic ? 'italic' : ''}`}
-              style={{ fontFamily: "'Anonymous Pro', monospace" }}
-              onClick={currentText.glow ? handleGlowTextClick : undefined}
-            >
-              {currentText.text}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {!gameStarted && textIndex < texts.length - 1 && (
-        <div className="absolute bottom-8 right-8 text-white animate-pulse">
-          ▼
-        </div>
-      )}
-
-      {gameStarted && (
-        <>
-          <video width="100" height="75" autoPlay muted loop>
-            <source src="Fenyvidi1.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep" width="200" height="175" autoPlay muted loop>
-            <source src="Vidi4Cicalampa.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep2" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi2TV.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep3" width="150" height="125" autoPlay muted loop>
-            <source src="Fenyvidi5.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep4" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi6Buszmeg.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep5" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi3tabla.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep6" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi7Egeszsegugy.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep7" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi8Reklamtabla.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep8" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi9Laptop.mp4" type="video/mp4"/>
-          </video>
-        </>
-      )}
-    </div>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  });
 </script>
+
 </body>
 </html>
