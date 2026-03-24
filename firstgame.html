@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Game</title>
-
-  <!-- Background -->
 
   <style>
     body {
@@ -22,12 +19,15 @@
     }
 
     video {
-      opacity: 0.5;
-      transition: opacity 0.3s;
+      opacity: 0.3;
+      transition: opacity 0.5s ease;
       position: absolute;
     }
 
-    /* Video positions */
+    .discovered {
+      opacity: 1 !important;
+    }
+
     #kep { top: 10%; left: 35%; }
     #kep2 { top: 80%; left: 9%; }
     #kep3 { top: 60%; left: 83%; }
@@ -38,16 +38,10 @@
     #kep8 { top: 55%; left: 33%; }
   </style>
 
-  <!-- React -->
-
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
   <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
 <body>
@@ -60,6 +54,7 @@ function App() {
   const [textIndex, setTextIndex] = useState(0);
   const [showTextBox, setShowTextBox] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
+  const [foundVideos, setFoundVideos] = useState({});
 
   const texts = [
     { text: '"Where am I?"', italic: true },
@@ -79,7 +74,11 @@ function App() {
   const handleGlowTextClick = (e) => {
     e.stopPropagation();
     setShowTextBox(false);
-    setGameStarted(true); // 🔥 START GAME HERE
+    setGameStarted(true);
+  };
+
+  const discover = (id) => {
+    setFoundVideos(prev => ({ ...prev, [id]: true }));
   };
 
   const getTextBoxPosition = () => {
@@ -91,7 +90,6 @@ function App() {
   return (
     <div className="w-screen h-screen relative overflow-hidden cursor-pointer" onClick={handleClick}>
       
-      {/* INTRO */}
       {!gameStarted && showTextBox && currentText.text && (
         <div className={`absolute left-1/2 -translate-x-1/2 ${getTextBoxPosition()}`}>
           <div className="bg-black px-4 py-2 inline-block">
@@ -106,52 +104,39 @@ function App() {
         </div>
       )}
 
-      {/* CLICK INDICATOR */}
       {!gameStarted && textIndex < texts.length - 1 && (
         <div className="absolute bottom-8 right-8 text-white animate-pulse">
           ▼
         </div>
       )}
 
-      {/* GAME SCENE */}
       {gameStarted && (
         <>
-          <video width="100" height="75" autoPlay muted loop>
-            <source src="Fenyvidi1.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep" width="200" height="175" autoPlay muted loop>
-            <source src="Vidi4Cicalampa.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep2" width="150" height="125" autoPlay muted loop
-            onMouseEnter={(e) => e.target.style.opacity = 1}>
-            <source src="Vidi2TV.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep3" width="150" height="125" autoPlay muted loop>
-            <source src="Fenyvidi5.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep4" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi6Buszmeg.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep5" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi3tabla.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep6" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi7Egeszsegugy.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep7" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi8Reklamtabla.mp4" type="video/mp4"/>
-          </video>
-
-          <video id="kep8" width="150" height="125" autoPlay muted loop>
-            <source src="Vidi9Laptop.mp4" type="video/mp4"/>
-          </video>
+          {[
+            { id: 'kep1', src: 'Fenyvidi1.mp4', w:100,h:75 },
+            { id: 'kep', src: 'Vidi4Cicalampa.mp4', w:200,h:175 },
+            { id: 'kep2', src: 'Vidi2TV.mp4', w:150,h:125 },
+            { id: 'kep3', src: 'Fenyvidi5.mp4', w:150,h:125 },
+            { id: 'kep4', src: 'Vidi6Buszmeg.mp4', w:150,h:125 },
+            { id: 'kep5', src: 'Vidi3tabla.mp4', w:150,h:125 },
+            { id: 'kep6', src: 'Vidi7Egeszsegugy.mp4', w:150,h:125 },
+            { id: 'kep7', src: 'Vidi8Reklamtabla.mp4', w:150,h:125 },
+            { id: 'kep8', src: 'Vidi9Laptop.mp4', w:150,h:125 }
+          ].map(v => (
+            <video
+              key={v.id}
+              id={v.id}
+              width={v.w}
+              height={v.h}
+              autoPlay
+              muted
+              loop
+              className={foundVideos[v.id] ? 'discovered' : ''}
+              onMouseEnter={() => discover(v.id)}
+            >
+              <source src={v.src} type="video/mp4"/>
+            </video>
+          ))}
         </>
       )}
     </div>
@@ -160,6 +145,5 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
-
 </body>
 </html>
