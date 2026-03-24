@@ -14,11 +14,55 @@
 /**
  * Text phase interface for the opening sequence
  */
-interface TextPhase {
-  text: string;
-  italic: boolean;
-  glow?: boolean;
+@font-face {
+  font family: 'CustomFont';
+  src: url('AnonymusPro-Regular.ttf') format('opentype');
 }
+    
+    @font-face {
+      font-family: 'CustomFont';
+      src: url('AnonymusPro-Regular.ttf') format('opentype'); 
+    }
+
+    @font-face {
+      font-family: 'AnonymusPro-Italic';
+      src: url('AnonymusPro-Italic.ttf') format('truetype');
+    }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    background-color: #ffffff;
+  }
+
+    .bottom-box {
+      position: fixed;
+      bottom: 20px
+      left: 50%
+      transform: translateX(-50%);
+
+      background-color: black;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 8px;
+
+      font-family: 'AnonymusPro-Regular';
+      font-size: 20px;
+      text-align: center;
+    }
+    </style>
+</head>
+
+<body>
+
+ <div class="bottom-box">
+   Hello
+ </div>
+
+</body>
+</html>
+    
+
 
 /**
  * Main App Component - RPG Text Adventure Game
